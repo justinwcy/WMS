@@ -1,6 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WMS.Areas.Identity.Data;
+using WMS.Areas.Identity.Pages.Account;
 using WMS.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("WarehouseUserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'WarehouseUserDbContextConnection' not found.");
 
@@ -10,6 +14,17 @@ builder.Services.AddDefaultIdentity<WarehouseUser>(options => options.SignIn.Req
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// configure the minimum requirement for password
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // we get the minimum length from the input model of register page
+    var registerInputModelType = typeof(RegisterModel.InputModel);
+    var passwordProperty = registerInputModelType.GetProperty("Password");
+    var passwordStringLengthAttribute = 
+        (StringLengthAttribute[])passwordProperty.GetCustomAttributes(typeof(StringLengthAttribute), false);
+    options.Password.RequiredLength = passwordStringLengthAttribute[0].MinimumLength;
+});
 
 var app = builder.Build();
 
@@ -31,5 +46,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+// add this for the Identity framework
+app.MapRazorPages();
 
 app.Run();
