@@ -21,11 +21,13 @@ namespace WMS.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<WarehouseUser> _signInManager;
+        private readonly UserManager<WarehouseUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<WarehouseUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = signInManager.UserManager;
             _logger = logger;
         }
 
@@ -87,6 +89,11 @@ namespace WMS.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/");
+            }
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -129,7 +136,15 @@ namespace WMS.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("Input.Email", "Email does not exist");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
                     return Page();
                 }
             }

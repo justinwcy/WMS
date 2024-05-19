@@ -1,19 +1,32 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 using WMS.Areas.Identity.Data;
 using WMS.Areas.Identity.Pages.Account;
 using WMS.Data;
+using WMS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("WarehouseUserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'WarehouseUserDbContextConnection' not found.");
 
 builder.Services.AddDbContext<WarehouseUserDbContext>(options => options.UseSqlServer(connectionString));
-
 builder.Services.AddDefaultIdentity<WarehouseUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<WarehouseUserDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(options=>
+{
+    options.AdminEmail = builder.Configuration["AdminEmail"];
+    options.AdminPassword = builder.Configuration["AdminPassword"];
+    options.SmtpHost = builder.Configuration["SmtpHost"];
+    options.SmtpPort = int.Parse(builder.Configuration["SmtpPort"]);
+});
 
 // configure the minimum requirement for password
 builder.Services.Configure<IdentityOptions>(options =>

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WMS.Areas.Identity.Data;
 
@@ -111,6 +112,11 @@ namespace WMS.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/");
+            }
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -127,6 +133,7 @@ namespace WMS.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                await _userManager.DeleteAsync(user);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -157,6 +164,11 @@ namespace WMS.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
+                    if (error.Code == "DuplicateUserName")
+                    {
+                        ModelState.AddModelError("Input.Email", $"This account with already exists");
+                        continue;
+                    }
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
