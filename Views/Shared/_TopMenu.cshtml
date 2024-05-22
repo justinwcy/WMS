@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WMS.Areas.Identity.Data
+
+@inject SignInManager<WarehouseUser> SignInManager
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+        
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="me-4">
+                <button type="button" id="menu-toggle" class="btn btn-primary">
+                    <i class="bi bi-list"></i>
+                    <span class="sr-only">Main Menu</span>
+                </button>
+            </li>
+        
+
+            <li>
+                <button class="btn btn-primary">
+                    <a class="text-white" asp-area="" asp-controller="Home" asp-action="Index">WMS</a>
+                </button>
+            </li>
+        }
+    </ul>
+</div>

@@ -16,26 +16,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="me-4">
-                        <button type="button" id="menu-toggle" class="btn btn-primary">
-                            <i class="bi bi-list"></i>
-                            <span class="sr-only">Main Menu</span>
-                        </button>
-                    </li>
-                    
-                    <li>
-                        <button class="btn btn-primary">
-                            <a class="text-white" asp-area="" asp-controller="Home" asp-action="Index">WMS</a>
-                        </button>
-                    </li>
-                </ul>
-            </div>
+            <partial name="_TopMenu" />
 
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <partial name="_LoginPartial" />
@@ -44,55 +25,8 @@
     </nav>
 </header>
 
-<form>
-
     <div class="d-flex" id="wrapper">
-        <div class="bg-light border-light" id="sidebar-wrapper">
-            <div class="sidebar-heading">Welcome!</div>
-            <div class="list-group list-group-flush">
-
-
-                <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-house"></i>
-                    Home
-                </button>
-
-                <div class="btn-group dropend navDropdown">
-
-                        <button type="button" class="btn btn-secondary dropdown-toggle text-lg-start" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-truck"></i>
-                        Receiving
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="dropdown-item">Incoming List</a></li>
-                        <li><a href="#" class="dropdown-item">Damaged Goods List</a></li>
-                    </ul>
-                </div>
-
-                <div class="btn-group dropend navDropdown">
-                    <button type="button" class="btn btn-secondary dropdown-toggle text-lg-start" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-truck"></i>
-                        Inventory
-                    </button>
-                    <ul class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Inventory List</a>
-                        <a href="#" class="dropdown-item">Putaway</a>
-                    </ul>
-                </div>
-
-                <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Privacy">
-                    <i class="bi bi-bar-chart"></i>
-                    Analytics
-                </button>
-                <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Privacy">
-                    <i class="bi bi-gear"></i>
-                    Settings
-                </button>
-
-            </div>
-
-
-        </div>
+        <partial name="_NavigationLeftMenuPartial" />
 
         <div id="page-content-wrapper">
             <div class="container-fluid">
@@ -104,10 +38,6 @@
 
     </div>
 
-</form>
-
-
-
 <footer class="border-top footer text-muted">
     <div class="container">
         &copy; 2024 - WMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -117,42 +47,7 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/navigationLeftMenu.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-
-    });
-</script>
-
-<script>
-    //to show the dropdown
-    $(document).ready(function () {
-        $('.navDropdown').hover(function () {
-            $(this).addClass('show');
-            $(this).find('.dropdown-menu').addClass('show');
-        }, function () {
-            $(this).removeClass('show');
-            $(this).find('.dropdown-menu').removeClass('show');
-        });
-    });
-
-    // to animate the dropdown to the left side
-    $(document).ready(function () {
-        $('.navDropdown').hover(function () {
-            $(this).addClass('show');
-            $(this).find('.dropdown-menu').animate({
-                left: "200px"
-            }, 200);
-        }, function () {
-            $(this).removeClass('show');
-            $(this).find('.dropdown-menu').animate({
-                left: "0px"
-            }, 200);
-        });
-    });
-</script>
-
 </body>
 </html>

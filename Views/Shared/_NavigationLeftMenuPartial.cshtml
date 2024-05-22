@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WMS.Areas.Identity.Data
+
+@inject SignInManager<WarehouseUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="bg-light border-light" id="sidebar-wrapper">
+        <div class="sidebar-heading">Welcome!</div>
+        <div class="list-group list-group-flush">
+            <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-house"></i>
+                Home
+            </button>
+
+            <div class="btn-group dropend navDropdown">
+
+                <button type="button" class="btn btn-secondary dropdown-toggle text-lg-start" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-truck"></i>
+                    Receiving
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="dropdown-item">Incoming List</a></li>
+                    <li><a href="#" class="dropdown-item">Damaged Goods List</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group dropend navDropdown">
+                <button type="button" class="btn btn-secondary dropdown-toggle text-lg-start" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-truck"></i>
+                    Inventory
+                </button>
+                <ul class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Inventory List</a>
+                    <a href="#" class="dropdown-item">Putaway</a>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Privacy">
+                <i class="bi bi-bar-chart"></i>
+                Analytics
+            </button>
+            <button class="btn btn-secondary text-lg-start" asp-area="" asp-controller="Home" asp-action="Privacy">
+                <i class="bi bi-gear"></i>
+                Settings
+            </button>
+        </div>
+    </div>
+}
+
